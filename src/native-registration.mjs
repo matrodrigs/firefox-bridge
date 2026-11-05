@@ -5,7 +5,7 @@ import { homedir } from 'node:os';
 import { spawnSync } from 'node:child_process';
 
 export const NATIVE_HOST = 'io.github.matrodrigs.firefox_bridge';
-const extensionId = 'firefox-bridge@local.codex-user';
+const extensionId = 'firefox-bridge@matrodrigs';
 const shellQuote = value => `'${value.replaceAll("'", "'\\''")}'`;
 const batchQuote = value => {
   if (/["\r\n]/.test(value)) throw new Error('Unsupported character in installation path.');

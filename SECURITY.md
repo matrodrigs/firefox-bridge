@@ -8,7 +8,7 @@ If private reporting is unavailable, open an issue requesting a private contact 
 
 ## Supported versions
 
-Security fixes target the latest release and the current `main` branch. Earlier versions may require an upgrade rather than a backport.
+The first release, 0.1.0, is being prepared. Security fixes currently target `main`; after publication they will target the latest release and `main`.
 
 ## Trust boundaries
 

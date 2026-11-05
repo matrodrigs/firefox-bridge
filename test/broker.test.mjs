@@ -1,10 +1,11 @@
+import { VERSION, PROTOCOL_VERSION } from '../src/version.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createBroker } from '../src/broker.mjs';
 
 const token = 'b'.repeat(64);
 const client = '0d9ac7ca-c491-44dd-99ae-ac5176938faf';
-const auth = { Authorization: `Bearer ${token}`, 'X-Firefox-Protocol': '2', 'X-Firefox-Version': '0.3.0' };
+const auth = { Authorization: `Bearer ${token}`, 'X-Firefox-Protocol': String(PROTOCOL_VERSION), 'X-Firefox-Version': VERSION };
 async function setup(t, options = {}) {
   const broker = createBroker({ token, port: 0, pollTimeout: 1000, callTimeout: 1000, ...options });
   const address = await broker.start(); t.after(() => broker.close());
@@ -49,7 +50,7 @@ test('timeout after delivery reports unknown outcome without replaying the actio
 
 test('outdated extensions are rejected before delivering calls', async t => {
   const { url } = await setup(t);
-  const response = await fetch(`${url}/extension/poll`, { headers: { ...auth, 'X-Firefox-Client': client, 'X-Firefox-Version': '0.2.1' } });
+  const response = await fetch(`${url}/extension/poll`, { headers: { ...auth, 'X-Firefox-Client': client, 'X-Firefox-Version': '0.0.0' } });
   assert.equal(response.status, 409);
   assert.equal((await response.json()).error, 'VERSION_MISMATCH');
   assert.equal((await (await fetch(`${url}/health`, { headers: auth })).json()).extensionOnline, false);
@@ -58,7 +59,7 @@ test('outdated extensions are rejected before delivering calls', async t => {
 test('outdated MCP clients cannot submit requests to an upgraded broker', async t => {
   const { url } = await setup(t);
   await fetch(`${url}/extension/hello`, { method: 'POST', headers: { ...auth, 'X-Firefox-Client': client } });
-  const response = await fetch(`${url}/rpc`, { method: 'POST', headers: { ...auth, 'X-Firefox-Protocol': '1', 'X-Firefox-Version': '0.2.1' }, body: JSON.stringify({ name: 'firefox_status', args: {} }) });
+  const response = await fetch(`${url}/rpc`, { method: 'POST', headers: { ...auth, 'X-Firefox-Protocol': '0', 'X-Firefox-Version': '0.0.0' }, body: JSON.stringify({ name: 'firefox_status', args: {} }) });
   assert.equal(response.status, 409);
   assert.equal((await response.json()).error, 'VERSION_MISMATCH');
   assert.equal((await (await fetch(`${url}/health`, { headers: auth })).json()).pendingCalls, 0);

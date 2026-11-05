@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Firefox Bridge",
-  "version": "0.3.0",
+  "version": "0.1.0",
   "description": "Local browser control and debugging through the Model Context Protocol.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "firefox-bridge@local.codex-user",
+      "id": "firefox-bridge@matrodrigs",
       "strict_min_version": "142.0",
       "data_collection_permissions": {
         "required": [

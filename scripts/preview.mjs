@@ -1,3 +1,4 @@
+import { VERSION } from '../src/version.mjs';
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import { mkdir, mkdtemp, readFile, writeFile } from 'node:fs/promises';
@@ -6,7 +7,7 @@ import { firefoxBinary, testDirectory } from './test-support.mjs';
 
 const runDir = await mkdtemp(join(await testDirectory(), 'ui-'));
 const longOrigin = 'https://research-preview.accessibility-and-interactions.example.org:8443';
-const baseState = { version: '0.3.0', policy: { enabled: true, defaultBrowse: 'allow', rules: { 'https://example.com': { read: 'block', interact: 'block', navigate: 'block', capture: 'block' } } }, pending: [{ id: 'demo', origin: 'https://docs.example.org', capabilities: ['download'], reason: 'Save the report you requested.' }], uploads: [{ id: 'upload-demo', origin: 'https://docs.example.org', label: 'Report attachment', accept: '.txt,.pdf', multiple: false }], audit: [{ time: '2026-11-05T14:30:00Z', operation: 'firefox_read_page', origin: 'https://example.com', outcome: 'allowed' }], controlledTabs: 1, currentOrigin: 'https://example.com', extras: { bookmarks: false, history: false, downloads: true, tabGroups: true }, connection: { paired: true, error: '', mode: 'native' } };
+const baseState = { version: VERSION, policy: { enabled: true, defaultBrowse: 'allow', rules: { 'https://example.com': { read: 'block', interact: 'block', navigate: 'block', capture: 'block' } } }, pending: [{ id: 'demo', origin: 'https://docs.example.org', capabilities: ['download'], reason: 'Save the report you requested.' }], uploads: [{ id: 'upload-demo', origin: 'https://docs.example.org', label: 'Report attachment', accept: '.txt,.pdf', multiple: false }], audit: [{ time: '2026-11-05T14:30:00Z', operation: 'firefox_read_page', origin: 'https://example.com', outcome: 'allowed' }], controlledTabs: 1, currentOrigin: 'https://example.com', extras: { bookmarks: false, history: false, downloads: true, tabGroups: true }, connection: { paired: true, error: '', mode: 'native' } };
 const cases = [
   { name: 'first-run-light-340', width: 340, height: 680, theme: 'light', kind: 'first' },
   { name: 'requests-light-420', width: 420, height: 1000, theme: 'light', kind: 'requests' },

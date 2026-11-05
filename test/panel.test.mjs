@@ -1,3 +1,4 @@
+import { VERSION } from '../src/version.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -7,7 +8,7 @@ async function panel(overrides = {}) {
   const html = await readFile('extension/panel.html', 'utf8');
   const js = await readFile('extension/panel.js', 'utf8');
   const dom = new JSDOM(html, { url: 'https://preview.invalid/', runScripts: 'outside-only', pretendToBeVisual: true });
-  const state = { version: '0.3.0', policy: { enabled: true, defaultBrowse: 'allow', rules: { 'https://example.com': { read: 'block' } } }, pending: [{ id: 'p', origin: 'https://docs.example.org', capabilities: ['read'], reason: 'Test request' }], uploads: [], audit: [], controlledTabs: 1, currentOrigin: 'https://example.com', extras: {}, connection: { paired: true, mode: 'native' }, ...overrides };
+  const state = { version: VERSION, policy: { enabled: true, defaultBrowse: 'allow', rules: { 'https://example.com': { read: 'block' } } }, pending: [{ id: 'p', origin: 'https://docs.example.org', capabilities: ['read'], reason: 'Test request' }], uploads: [], audit: [], controlledTabs: 1, currentOrigin: 'https://example.com', extras: {}, connection: { paired: true, mode: 'native' }, ...overrides };
   let poll, reads = 0;
   const messages = [];
   dom.window.setInterval = fn => { poll = fn; return 1; };
@@ -65,7 +66,7 @@ test('native connection needs no token form and exposes recovery only on failure
   assert.ok(messages.some(message => message.action === 'retry_connection'));
   assert.equal(document.querySelector('#connection-state').textContent, 'Connected');
   assert.equal(document.querySelector('#connection-help').hidden, true);
-  assert.equal(document.querySelector('#version').textContent, 'v0.3.0');
+  assert.equal(document.querySelector('#version').textContent, `v${VERSION}`);
   dom.window.close();
 });
 

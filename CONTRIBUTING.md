@@ -36,8 +36,10 @@ Keep runtime credentials, private URLs, page contents, screenshots, console outp
 1. Update the version metadata together in `package.json`, the lockfile, `plugin.json`, `extension/manifest.json`, and `src/version.mjs`. Bump the internal protocol version for incompatible transport changes.
 2. Run both quality gates on the intended host. Record actual results in the release notes; older reports do not establish validation for a new build.
 3. Review `CHANGELOG.md`, installation instructions, tool catalog, and limitations against the implementation.
-4. Run `npm run package`. Inspect `artifacts/Firefox-Bridge-<version>.zip`, `artifacts/Firefox-Bridge-<version>.xpi`, and the generated checksum file.
+4. Run `npm run package`. Inspect `Firefox-Bridge-<version>-unsigned.xpi`, the `-source.zip` and `-dev.zip` archives, and `SHA256SUMS` under `artifacts/`. Keep these candidates in the GitHub draft while signing is pending.
 5. Inspect the archive inventory for local paths, runtime keys, profiles, debug captures, logs, test fixtures, and unexpected generated files. Source test scripts may be included; test run data must not be.
-6. Publish the reviewed source and intended artifacts. Label the generated XPI as unsigned unless a separate Mozilla signing step actually succeeded.
+6. Follow the [signing guide](docs/signing.md) to submit the extension through Mozilla's self-distributed (unlisted) channel. Include the source archive and [reproducible build instructions](AMO-REVIEW.md).
+7. Verify the returned signed XPI matches the intended extension identifier and version, and test its installation in standard Firefox. Keep the returned signed file intact; rebuilding an XPI does not preserve its signature.
+8. Assemble the final release with the signed XPI and matching local runtime package, regenerate checksums for the actual downloads, and only then publish the draft. Update the changelog with the release date.
 
-Mozilla signing and AMO publication are separate release actions. Do not report an add-on as signed or installed based on successful packaging alone.
+Unsigned candidates are for developer testing and Mozilla submission, not public release assets. Signing does not require a public AMO listing: see Mozilla's [signing and distribution overview](https://extensionworkshop.com/documentation/publish/signing-and-distribution-overview/). Do not report an add-on as signed or installed based on packaging alone.
