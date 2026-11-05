@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip/schema.json",
+  "entry": ["src/background.mjs", "src/panel.mjs", "src/mcp.mjs", "src/broker-main.mjs", "src/native-host.mjs", "scripts/*.mjs", "test/*.test.mjs"],
+  "project": ["src/**/*.mjs", "scripts/**/*.mjs", "test/**/*.mjs"],
+  "ignoreBinaries": ["where.exe", "taskkill.exe", "reg.exe"]
+}

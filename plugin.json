@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "firefox-bridge",
+  "version": "0.3.0",
+  "description": "Local Firefox control and debugging with site permissions.",
+  "author": {
+    "name": "matrodrigs"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Firefox Bridge",
+        "shortDescription": "Local Firefox control",
+        "category": "Productivity",
+        "capabilities": [
+          "Interactive"
+        ],
+        "defaultPrompt": "Use Firefox Bridge to work with my authorized Firefox tabs."
+      }
+    }
+  }
+}

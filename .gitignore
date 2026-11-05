@@ -1,0 +1,12 @@
+node_modules/
+web-ext-artifacts/
+test-artifacts/
+.runtime/
+dist/
+artifacts/
+extension/background.js
+extension/panel.js
+*.log
+.env
+.env.*
+!.env.example

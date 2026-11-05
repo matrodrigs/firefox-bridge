@@ -1,0 +1,68 @@
+{
+  "manifest_version": 2,
+  "name": "Firefox Bridge",
+  "version": "0.3.0",
+  "description": "Local browser control and debugging through the Model Context Protocol.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "firefox-bridge@local.codex-user",
+      "strict_min_version": "142.0",
+      "data_collection_permissions": {
+        "required": [
+          "websiteContent",
+          "browsingActivity"
+        ],
+        "optional": []
+      }
+    }
+  },
+  "permissions": [
+    "<all_urls>",
+    "storage",
+    "tabs",
+    "scripting",
+    "webNavigation",
+    "webRequest",
+    "webRequestBlocking",
+    "nativeMessaging"
+  ],
+  "optional_permissions": [
+    "bookmarks",
+    "history",
+    "downloads",
+    "tabGroups"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "Firefox Bridge",
+    "default_popup": "panel.html",
+    "default_icon": "icon.svg"
+  },
+  "sidebar_action": {
+    "default_title": "Firefox Bridge",
+    "default_panel": "panel.html",
+    "default_icon": "icon.svg"
+  },
+  "options_ui": {
+    "page": "panel.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  "content_security_policy": "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' http: https:; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none';",
+  "commands": {
+    "_execute_sidebar_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y"
+      },
+      "description": "Open Firefox Bridge"
+    }
+  }
+}

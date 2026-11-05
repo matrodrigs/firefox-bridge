@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Firefox Bridge</title>
+  <link rel="stylesheet" href="panel.css">
+  <script src="panel.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="masthead">
+      <img src="icon.svg" width="40" height="40" alt="">
+      <div><h1>Firefox Bridge</h1><p id="connection-state" class="connection-state" role="status">Connecting…</p></div>
+    </header>
+
+    <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+    <section class="access-bar" aria-label="Browser access">
+      <div><h2 id="access-status">Loading…</h2><p id="access-detail">Checking browser access.</p></div>
+      <button id="toggle-access" type="button" disabled>Enable</button>
+    </section>
+    <div id="connection-help" class="connection-help" hidden>
+      <p id="connection-error"></p>
+      <div class="inline-actions"><button id="retry-connection" class="quiet" type="button">Retry connection</button><a href="https://github.com/matrodrigs/firefox-bridge/blob/main/docs/installation.md" target="_blank" rel="noopener noreferrer">Setup guide</a></div>
+    </div>
+
+    <section id="pending-section" class="requests" aria-labelledby="pending-heading" hidden>
+      <div class="section-heading"><h2 id="pending-heading">Requests</h2><span id="pending-count" class="count"></span></div>
+      <div id="pending-list"></div>
+    </section>
+    <section id="upload-section" class="requests" aria-labelledby="upload-heading" hidden>
+      <h2 id="upload-heading">Attach files</h2>
+      <div id="upload-list"></div>
+    </section>
+
+    <section id="managed-section" class="managed-row" aria-label="Controlled tabs" hidden>
+      <span id="managed-description"></span><button id="release-all" class="quiet" type="button" disabled>Release</button>
+    </section>
+
+    <details id="sites-section" class="settings-section">
+      <summary><span>Site access</span><span id="site-summary" class="summary-value"></span></summary>
+      <div class="details-content">
+        <label for="default-browse">Default access</label>
+        <select id="default-browse"><option value="allow">Allow all sites</option><option value="ask">Ask for each site</option></select>
+        <p class="hint">Site rules override this default. File transfers and debugging have separate permissions.</p>
+        <div class="section-heading rules-heading"><h2>Site rules</h2><span id="site-count" class="count">0</span></div>
+        <div id="sites-list"></div>
+        <details id="add-site" class="add-site"><summary>Add a site</summary>
+          <form id="site-form">
+            <label for="site-url">Site address</label>
+            <input id="site-url" type="url" placeholder="https://example.com" autocomplete="off" required>
+            <button id="use-current" class="quiet" type="button" hidden>Use current site</button>
+            <label for="site-decision">Access</label><select id="site-decision"><option value="allow">Allow</option><option value="block">Block</option><option value="ask">Ask</option></select>
+            <button type="submit">Save rule</button>
+          </form>
+        </details>
+      </div>
+    </details>
+
+    <details id="features-section" class="settings-section">
+      <summary><span>Browser features</span></summary>
+      <div class="details-content feature-options">
+        <label class="check"><input id="extra-bookmarks" type="checkbox"><span>Bookmarks</span></label>
+        <label class="check"><input id="extra-history" type="checkbox"><span>History</span></label>
+        <label class="check"><input id="extra-downloads" type="checkbox"><span>Downloads</span></label>
+        <label class="check"><input id="extra-tabGroups" type="checkbox"><span>Tab groups</span></label>
+      </div>
+    </details>
+    <details id="activity-section" class="settings-section">
+      <summary><span>Recent activity</span></summary>
+      <div class="details-content"><ol id="audit-list" class="audit"></ol></div>
+    </details>
+
+    <footer><a href="https://github.com/matrodrigs/firefox-bridge/blob/main/docs/installation.md" target="_blank" rel="noopener noreferrer">Help</a><span id="version"></span></footer>
+  </main>
+</body>
+</html>

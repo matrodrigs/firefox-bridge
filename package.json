@@ -1,0 +1,43 @@
+{
+  "name": "firefox-bridge",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "lint:extension": "web-ext lint --source-dir extension --warnings-as-errors",
+    "start": "node dist/mcp.cjs",
+    "package": "node scripts/package.mjs",
+    "check:syntax": "node scripts/check-syntax.mjs",
+    "check": "npm run build && npm run check:syntax && npm run lint && npm run knip && npm test && npm run lint:extension",
+    "test:firefox": "node scripts/firefox-test.mjs && node scripts/advanced-firefox-test.mjs && node scripts/e2e-test.mjs && node scripts/interaction-firefox-test.mjs && node scripts/debug-firefox-test.mjs",
+    "doctor": "node scripts/doctor.mjs",
+    "setup": "node scripts/setup.mjs",
+    "lint": "eslint src scripts test eslint.config.mjs",
+    "knip": "knip --no-progress",
+    "preview": "node scripts/preview.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "esbuild": "0.28.2",
+    "eslint": "10.14.0",
+    "fflate": "0.8.3",
+    "globals": "17.14.0",
+    "jsdom": "30.1.3",
+    "knip": "6.44.1",
+    "web-ext": "10.8.0"
+  },
+  "description": "Local Firefox control and debugging through the Model Context Protocol.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matrodrigs/firefox-bridge.git"
+  }
+}
