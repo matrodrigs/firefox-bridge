@@ -94,7 +94,7 @@ The host name is `io.github.matrodrigs.firefox_bridge`; its manifest allows only
 | Linux | `~/.mozilla/native-messaging-hosts/` |
 | macOS | `~/Library/Application Support/Mozilla/NativeMessagingHosts/` |
 
-Setup writes a manifest and launcher referencing the current Node executable and built native host. If you move the checkout or change the Node installation, run setup again. Windows is tested directly; the other registration branches require validation on their respective hosts.
+Setup writes a manifest and launcher referencing the current Node executable and built native host. If you move the checkout or change the Node installation, run setup again. Windows is tested directly and Linux in Ubuntu CI; macOS registration remains untested.
 
 ## Troubleshooting
 

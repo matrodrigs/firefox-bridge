@@ -20,12 +20,12 @@ The local Firefox fixtures passed for:
 
 The panel was inspected at narrow and wide widths in light and dark themes, including long origins, pending requests, and connection errors. The reviewed layouts had no horizontal overflow. Behavioral tests cover control focus and file-selection preservation during refresh.
 
-Raw local reports and screenshots are stored under `test-artifacts/firefox-bridge-validation/` and excluded from source/release packages. GitHub Actions results are separate evidence; this record does not assert a remote CI outcome.
+Raw local reports and screenshots are stored under `test-artifacts/firefox-bridge-validation/` and excluded from source/release packages. The [GitHub Actions release run](https://github.com/matrodrigs/firefox-bridge/actions/runs/42012662067) also passed: the shared checks and packaging on Windows/Ubuntu with Node 22/24, and all Firefox integration workflows on Ubuntu. That run validates implementation commit `752a9d3`; subsequent release documentation updates do not change the implementation.
 
 ## Limits
 
 - Local browser verification covers the installed Firefox version and synthetic fixtures. It does not establish compatibility with every site or every supported Firefox release.
-- Linux and macOS native-host registration branches require validation on those hosts.
+- Linux native-host registration and reconnection passed in the Ubuntu CI fixture. macOS registration remains untested.
 - Synthetic input cannot satisfy every trusted-event requirement. The debug tools do not provide CDP, breakpoints, arbitrary evaluation, or complete DevTools parity.
 - Visual checks and automated behavior tests do not establish full screen-reader or accessibility certification.
 - Generated XPIs are unsigned. Packaging, lint, and local tests do not substitute for Mozilla signing or review.
