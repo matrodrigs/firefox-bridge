@@ -2,7 +2,19 @@
 
 ## Setup and quality gate
 
-Use Node.js 22 or later and Firefox 142 or later. Install pinned dependencies with `npm ci`, then run:
+Use Node.js 22 or later and Firefox 142 or later. Prepare a development checkout:
+
+```sh
+git clone https://github.com/matrodrigs/firefox-bridge.git
+cd firefox-bridge
+npm ci
+npm run build
+npm run setup
+```
+
+In Firefox, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select `extension/manifest.json`. Open the extension panel and enable access. Temporary installation lasts until Firefox restarts; reload the extension after rebuilding it. Connect your client using the [installation guide](docs/installation.md#connect-a-client).
+
+Run the quality gates before submitting changes:
 
 ```sh
 npm run check
@@ -16,6 +28,8 @@ Use `FIREFOX_BINARY` to select an installed Firefox executable. Tests use tempor
 For a focused iteration, run the relevant Node test file with `node --test test/<name>.test.mjs`, then complete the shared gates before submitting behavior changes. Record unavailable tests and the actual host/runtime versions rather than inferring compatibility from another environment.
 
 ## Scope and design
+
+Use Conventional Commits for commit subjects: `type(scope): description`, or `type: description` when no scope is needed. For example, `fix(panel): preserve focus during refresh`.
 
 Keep changes tied to a concrete browser workflow or failure. Prefer explicit module dependencies and ordinary JavaScript over generic plugin systems or speculative abstractions. Public arguments live in `src/contract.mjs`; preserve its validation at all request boundaries.
 
@@ -31,15 +45,13 @@ Code, filenames, UI, tests, and documentation use English. Use native controls, 
 
 Keep runtime credentials, private URLs, page contents, screenshots, console output, and profiles out of public reports unless deliberately sanitized. For a vulnerability, follow [Security](SECURITY.md).
 
-## Release procedure
+## Build and packaging
 
 1. Update the version metadata together in `package.json`, the lockfile, `plugin.json`, `extension/manifest.json`, and `src/version.mjs`. Bump the internal protocol version for incompatible transport changes.
-2. Run both quality gates on the intended host. Record actual results in the release notes; older reports do not establish validation for a new build.
+2. Run both quality gates on the intended host. Record actual results; older reports do not establish validation for a new build.
 3. Review `CHANGELOG.md`, installation instructions, tool catalog, and limitations against the implementation.
-4. Run `npm run package`. Inspect `Firefox-Bridge-<version>-unsigned.xpi`, the `-source.zip` and `-dev.zip` archives, and `SHA256SUMS` under `artifacts/`. Keep these candidates in the GitHub draft while signing is pending.
+4. Run `npm run package`. Inspect the generated extension and local bridge archives, source archive, and checksums under `artifacts/`.
 5. Inspect the archive inventory for local paths, runtime keys, profiles, debug captures, logs, test fixtures, and unexpected generated files. Source test scripts may be included; test run data must not be.
-6. Follow the [signing guide](docs/signing.md) to submit the extension through Mozilla's self-distributed (unlisted) channel. Include the source archive and [reproducible build instructions](AMO-REVIEW.md).
-7. Verify the returned signed XPI matches the intended extension identifier and version, and test its installation in standard Firefox. Keep the returned signed file intact; rebuilding an XPI does not preserve its signature.
-8. Assemble the final release with the signed XPI and matching local runtime package, regenerate checksums for the actual downloads, and only then publish the draft. Update the changelog with the release date.
+6. Extract the source archive into a fresh directory, run `npm ci` and `npm run build`, and compare the rebuilt extension files with the packaged files.
 
-Unsigned candidates are for developer testing and Mozilla submission, not public release assets. Signing does not require a public AMO listing: see Mozilla's [signing and distribution overview](https://extensionworkshop.com/documentation/publish/signing-and-distribution-overview/). Do not report an add-on as signed or installed based on packaging alone.
+When updating a development checkout, run `npm ci`, `npm run build`, and `npm run setup`; rerun `install-codex.cmd` if using the plugin. Extension and runtime versions must match.

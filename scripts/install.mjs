@@ -24,4 +24,4 @@ else {
   if (result.status !== 0) throw new Error(result.stderr || result.stdout || 'MCP setup failed.');
   process.stdout.write(result.stdout);
 }
-if (!remove) process.stdout.write(`\nNext steps:\n1. Run setup.cmd once to register the native connection.\n2. Open about:debugging#/runtime/this-firefox and load the temporary extension:\n   ${resolve('extension/manifest.json')}\n3. Firefox Bridge connects automatically through the native host.\n4. Enable access and review site permissions in the extension panel.\n5. Use the firefox_* tools in Codex. Open a new chat if they do not appear.\n\nKeep this folder in place while the MCP server is installed.\n`);
+if (!remove) process.stdout.write(`\nNext steps:\n1. Run setup.cmd once to register the native connection.\n2. Install Fox Bridge in Firefox.\n3. Fox Bridge connects automatically through the native host.\n4. Enable access and review site permissions in the extension panel.\n5. Use the firefox_* tools in Codex. Open a new chat if they do not appear.\n\nKeep this folder in place while the MCP server is installed.\n`);

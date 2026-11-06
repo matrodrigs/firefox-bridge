@@ -1,11 +1,12 @@
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { resolve, join, relative } from 'node:path';
-import { zipSync, unzipSync, strFromU8 } from 'fflate';
+import { zipSync, unzipSync, strFromU8, strToU8 } from 'fflate';
 
 const entries = {};
-const version = JSON.parse(await readFile('package.json', 'utf8')).version;
-const selected = ['extension', 'dist', 'src', 'scripts', 'test', 'docs', 'package.json', 'package-lock.json', 'plugin.json', 'mcp.json', '.gitignore', '.gitattributes', 'README.md', 'AMO-REVIEW.md', 'AGENTS.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'SECURITY.md', 'LICENSE', 'THIRD-PARTY-LICENSES.txt', 'setup.cmd', 'install-codex.cmd', 'uninstall.cmd', 'eslint.config.mjs', 'knip.json'];
+const metadata = JSON.parse(await readFile('package.json', 'utf8'));
+const version = metadata.version;
+const selected = ['extension', 'dist', 'src', 'scripts', 'test', 'docs', 'package.json', 'package-lock.json', 'plugin.json', 'mcp.json', '.gitignore', '.gitattributes', 'README.md', 'AGENTS.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'SECURITY.md', 'LICENSE', 'THIRD-PARTY-LICENSES.txt', 'setup.cmd', 'install-codex.cmd', 'uninstall.cmd', 'eslint.config.mjs', 'knip.json'];
 async function add(path) {
   let directory;
   try { directory = await readdir(path, { withFileTypes: true }); } catch (error) { if (error.code !== 'ENOTDIR') throw error; entries[relative('.', path).replaceAll('\\', '/')] = new Uint8Array(await readFile(path)); return; }
@@ -21,7 +22,7 @@ const extensionEntries = Object.fromEntries(Object.entries(entries).filter(([nam
 const zipOptions = { level: 9, mtime: new Date(2026, 0, 1) };
 const xpi = zipSync(extensionEntries, zipOptions);
 await mkdir('artifacts', { recursive: true });
-const xpiPath = resolve(`artifacts/Firefox-Bridge-${version}-unsigned.xpi`);
+const xpiPath = resolve(`artifacts/Fox-Bridge-${version}-unsigned.xpi`);
 await writeFile(xpiPath, xpi);
 const archive = zipSync(Object.fromEntries(Object.entries(entries).map(([name, data]) => [`firefox-bridge/${name}`, data])), zipOptions);
 const archivePath = resolve(`artifacts/Firefox-Bridge-${version}-dev.zip`); await writeFile(archivePath, archive);
@@ -33,5 +34,22 @@ const sourceEntries = Object.fromEntries(Object.entries(entries).filter(([name])
 const sources = zipSync(sourceEntries, zipOptions);
 const sourcePath = resolve(`artifacts/Firefox-Bridge-${version}-source.zip`);
 await writeFile(sourcePath, sources);
-await writeFile('artifacts/SHA256SUMS', [[`Firefox-Bridge-${version}-dev.zip`, archive], [`Firefox-Bridge-${version}-unsigned.xpi`, xpi], [`Firefox-Bridge-${version}-source.zip`, sources]].map(([name, bytes]) => `${createHash('sha256').update(bytes).digest('hex')}  ${name}`).join('\n') + '\n');
-process.stdout.write(JSON.stringify({ archivePath, xpiPath, sourcePath, files: Object.keys(checked).length, zipBytes: archive.length, xpiBytes: xpi.length, unsigned: true, releaseReady: false }) + '\n');
+const runtimeFiles = new Set([
+  'dist/mcp.cjs', 'dist/broker.cjs', 'dist/native-host.cjs',
+  'src/native-registration.mjs', 'src/runtime.mjs', 'src/version.mjs',
+  'scripts/setup.mjs', 'scripts/install.mjs', 'scripts/install-plugin.mjs', 'scripts/doctor.mjs',
+  'plugin.json', 'mcp.json', 'README.md', 'CONTRIBUTING.md', 'CHANGELOG.md', 'SECURITY.md',
+  'LICENSE', 'THIRD-PARTY-LICENSES.txt', 'setup.cmd', 'install-codex.cmd', 'uninstall.cmd'
+]);
+for (const file of runtimeFiles) if (!entries[file]) throw new Error(`Missing runtime file: ${file}`);
+const runtimeEntries = Object.fromEntries(Object.entries(entries).filter(([name]) => name.startsWith('docs/') || runtimeFiles.has(name)).map(([name, data]) => [`firefox-bridge/${name}`, data]));
+runtimeEntries['firefox-bridge/package.json'] = strToU8(JSON.stringify({
+  name: metadata.name, version, private: true, type: 'module', engines: metadata.engines,
+  scripts: { start: 'node dist/mcp.cjs', setup: 'node scripts/setup.mjs', doctor: 'node scripts/doctor.mjs' },
+  description: metadata.description, license: metadata.license, repository: metadata.repository
+}, null, 2) + '\n');
+const runtime = zipSync(runtimeEntries, zipOptions);
+const runtimePath = resolve(`artifacts/Firefox-Bridge-${version}.zip`);
+await writeFile(runtimePath, runtime);
+await writeFile('artifacts/SHA256SUMS', [[`Firefox-Bridge-${version}.zip`, runtime], [`Firefox-Bridge-${version}-dev.zip`, archive], [`Fox-Bridge-${version}-unsigned.xpi`, xpi], [`Firefox-Bridge-${version}-source.zip`, sources]].map(([name, bytes]) => `${createHash('sha256').update(bytes).digest('hex')}  ${name}`).join('\n') + '\n');
+process.stdout.write(JSON.stringify({ runtimePath, archivePath, xpiPath, sourcePath, files: Object.keys(checked).length, runtimeFiles: Object.keys(runtimeEntries).length, runtimeBytes: runtime.length, zipBytes: archive.length, xpiBytes: xpi.length, unsigned: true, releaseReady: false }) + '\n');

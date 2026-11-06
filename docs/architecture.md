@@ -64,7 +64,7 @@ The extension profile owns authorization; the broker owns RPC delivery; the docu
 
 The source is JavaScript modules. esbuild bundles the extension background/panel and the Node MCP/broker/native-host entry points. Packaging includes those outputs and the source/documentation needed to review or rebuild them, along with generated third-party license notices. The packager verifies selected archive entries and excludes local state.
 
-Local packaging produces an explicitly named `-unsigned.xpi` submission candidate, a reproducible source archive, a development package, and checksums. The GitHub release stays in draft until Mozilla returns a signed XPI and that exact file passes installation checks. The final release includes the signed extension, matching runtime package, and checksums of the published files. Source publication and binary release are separate steps.
+The extension and local runtime are installed separately. The runtime package contains compiled bundles and setup helpers so users can register the bridge without installing development dependencies. Source archives support reproducible builds; generated checksums identify the exact packaged files.
 
 ## Agent guidance
 

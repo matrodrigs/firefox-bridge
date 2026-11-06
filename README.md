@@ -2,9 +2,7 @@
 
 <p><samp>Local Firefox control and debugging through the Model Context Protocol.</samp></p>
 
-Read pages, interact with forms, manage tabs, and investigate browser issues through your AI assistant. Firefox Bridge connects your existing Firefox session to a local MCP server, with access rules you control in the extension.
-
-**0.1.0 is being prepared for its first release.** Public downloads will be available after Mozilla signs the extension. The source workflow below is for development and testing.
+Read pages, interact with forms, manage tabs, and investigate browser issues through your AI assistant. Firefox Bridge pairs the **Fox Bridge** extension with a local MCP server, with access rules you control in Firefox.
 
 [Demonstration](#demonstration) · [Quick start](#quick-start) · [Documentation](#documentation)
 
@@ -12,36 +10,24 @@ Read pages, interact with forms, manage tabs, and investigate browser issues thr
 
 The extension panel with example requests and site access controls.
 
-<img src="docs/assets/panel.png" alt="Firefox Bridge panel showing automatic connection, pending requests, and expandable settings" width="360">
+<img src="docs/assets/panel.png" alt="Fox Bridge panel showing automatic connection, pending requests, and expandable settings" width="360">
 
 ## Quick start
 
-You need **Firefox 142+**, **Node.js 22+**, and an MCP client that supports local `stdio` servers. Windows includes setup helpers; see the [installation guide](docs/installation.md) for manual setup and platform limits.
+You need **Firefox 142+**, **Node.js 22+**, and an MCP client. The extension works with a small local bridge, installed once on your computer.
 
-### 1. Prepare the project
+1. Install **Fox Bridge** in Firefox.
+2. Extract the local bridge package to a permanent folder and run `setup.cmd` on Windows, or `node scripts/setup.mjs` on Linux/macOS.
+3. [Connect your MCP client](docs/installation.md#connect-a-client). On Windows, `install-codex.cmd` sets up the bridge and Codex together.
+4. Open **Fox Bridge**, enable access, and review site permissions. It connects automatically; there is no pairing key to copy.
 
-```sh
-git clone https://github.com/matrodrigs/firefox-bridge.git
-cd firefox-bridge
-npm ci
-npm run build
-npm run setup
-```
+See the [installation guide](docs/installation.md) for extension installation, platform limits, and troubleshooting.
 
-### 2. Connect Firefox and your client
-
-1. In Firefox, open `about:debugging#/runtime/this-firefox`, choose **Load Temporary Add-on**, and select `extension/manifest.json`.
-2. Open **Firefox Bridge**. The registered native host connects automatically; there is no pairing key to copy or manual reconnect step.
-3. Enable access in the panel and review site permissions. Browsing defaults to all HTTP/HTTPS sites; specific blocks take precedence. Uploads, downloads, and debugging have separate grants.
-4. Register the local MCP server with your client. For Codex, run `codex mcp add firefox-bridge -- node "<absolute-path>/dist/mcp.cjs"`. Other clients use the same command and absolute path. See [client setup](docs/installation.md#connect-a-client).
-
-A temporary add-on disappears when Firefox restarts. Permanent installation in standard Firefox will use the signed XPI from the release. Local packaging produces an unsigned submission candidate, not a public release. See [installation and updates](docs/installation.md).
-
-### 3. Make your first request
+Ask your assistant:
 
 > Use Firefox Bridge. Check the connection, list my authorized tabs, and read the page I am working on. Show the available fields before changing anything.
 
-For debugging, enable debug access for the target site in the panel, then ask your assistant to inspect an element, collect console errors, or examine request timings. Run `npm run doctor` to check local readiness. See the [workflows and examples](docs/workflows.md).
+For debugging, enable debug access for the target site, then ask your assistant to inspect an element, collect console errors, or examine request timings. See the [workflows and examples](docs/workflows.md).
 
 ## Features
 
@@ -57,16 +43,13 @@ See the [capability and tool reference](docs/reference.md) for limits and permis
 
 The extension starts paused. Once enabled, the panel's browsing default and exact-origin rules determine access. The assistant cannot change permissions or retrieve internal credentials through MCP. Private tabs and protected browser pages are excluded.
 
-Element references belong to a page snapshot; screenshot coordinates belong to a recent capture. Navigation and permission changes invalidate operations. If an action times out after delivery, inspect the page before repeating it: the action may already have occurred.
-
-Read the [behavioral specification](docs/spec.md) for authorization, observation, and recovery rules.
+If an action times out after delivery, inspect the page before repeating it: the action may already have occurred. See the [behavioral specification](docs/spec.md) for recovery rules.
 
 ## Limitations
 
 - Input events are synthetic. Websites requiring trusted input, native dialogs, closed shadow roots, or browser chrome can require manual interaction.
 - Debugging covers page instrumentation and browser-exposed metadata. It does not provide a CDP session, JavaScript breakpoints, arbitrary evaluation, or a complete DevTools replacement.
-- Console collection begins when started, is bounded and temporary, and can be affected by page code. Network inspection excludes headers, cookies, bodies, and URL query strings.
-- Uploads require files chosen in the extension panel. Downloads accept direct URLs with size limits. See the [reference](docs/reference.md#file-transfers).
+- Uploads require files chosen in the extension panel. Console and network observations are bounded; see the [reference](docs/reference.md) for data and file-transfer limits.
 
 ## Documentation
 
@@ -77,8 +60,6 @@ Read the [behavioral specification](docs/spec.md) for authorization, observation
 | [Technical reference](docs/reference.md) | Tools, permissions, limits, and configuration |
 | [Behavioral specification](docs/spec.md) | Authorization, lifecycle, and compatibility contracts |
 | [Architecture](docs/architecture.md) | Module responsibilities and dependency direction |
-
-Clients receive complete tool schemas and guidance at runtime. Most users can work through natural-language requests.
 
 ## Development
 

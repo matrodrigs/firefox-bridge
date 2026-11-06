@@ -21,7 +21,7 @@ export function registrationDirectory() {
 export async function registerNativeHost({ root = resolve('.'), name = NATIVE_HOST, environment = {} } = {}) {
   if (!/^[a-z0-9_]+(?:\.[a-z0-9_]+)*$/.test(name)) throw new Error('Invalid native host name.');
   const entry = join(root, 'dist', 'native-host.cjs');
-  if (!existsSync(entry)) throw new Error('Build files are missing. Run npm ci and npm run build first.');
+  if (!existsSync(entry)) throw new Error('Runtime files are missing. Extract the complete bridge package.');
   const directory = registrationDirectory();
   await mkdir(directory, { recursive: true });
   const manifestPath = join(directory, `${name}.json`);

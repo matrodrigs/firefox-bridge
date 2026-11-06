@@ -37,7 +37,7 @@ export function createAdvanced({ browser, policy, managed, getTab, verify, page,
   for (const [name, stage] of [['onCompleted', 'completed'], ['onErrorOccurred', 'failed'], ['onBeforeRedirect', 'redirected']]) browser.webRequest[name]?.addListener(details => recordRequest(details, stage), { urls: ['<all_urls>'] });
 
   async function optional(permission) {
-    if (!await browser.permissions.contains({ permissions: [permission] })) throw new BridgeError('BROWSER_PERMISSION_REQUIRED', `Enable ${permission} in the Firefox Bridge panel.`);
+    if (!await browser.permissions.contains({ permissions: [permission] })) throw new BridgeError('BROWSER_PERMISSION_REQUIRED', `Enable ${permission} in the Fox Bridge panel.`);
   }
   async function authorizedTabs(ids, capabilities) {
     if (!ids?.length) throw new BridgeError('INVALID_ARGUMENT', 'Provide tab IDs.');
@@ -130,7 +130,7 @@ export function createAdvanced({ browser, policy, managed, getTab, verify, page,
       if ([...uploads.values()].filter(x => x.status === 'pending_user').length >= 10) throw new BridgeError('TOO_MANY_REQUESTS', 'Too many pending upload requests.');
       const item = { id: crypto.randomUUID(), origin: target.frameTicket.origin, args, url: target.frame.url, ...probe, status: 'pending_user', expires: Date.now() + 300000 };
       uploads.set(item.id, item);
-      return { requestId: item.id, status: item.status, next: 'Choose files in the Firefox Bridge panel.' };
+      return { requestId: item.id, status: item.status, next: 'Choose files in the Fox Bridge panel.' };
     }
     if (name === 'firefox_frames') {
       const target = await getTab(args.tabId, ['read']);

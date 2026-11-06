@@ -155,11 +155,11 @@ export function createController(browser, { defaults = {} } = {}) {
       const item = { id: crypto.randomUUID(), origin, capabilities, reason: args.reason, created: Date.now() };
       pending.set(item.id, item);
       await browser.browserAction.setBadgeText({ text: String(pending.size) });
-      return { requestId: item.id, status: 'pending_user', origin, next: 'Open Firefox Bridge in Firefox and review the request.' };
+      return { requestId: item.id, status: 'pending_user', origin, next: 'Open Fox Bridge in Firefox and review the request.' };
     }
     if (name === 'firefox_console' && args.action === 'stop') return debugging.call(name, args);
     if (name === 'firefox_network' && args.action === 'stop') return advanced.call(name, args);
-    if (!policy.enabled) throw new BridgeError('PAUSED', 'Enable access in the Firefox Bridge panel.');
+    if (!policy.enabled) throw new BridgeError('PAUSED', 'Enable access in the Fox Bridge panel.');
     if (name === 'firefox_list_tabs') {
       const tabs = await browser.tabs.query({});
       const allowed = tabs.filter(t => !t.incognito && policy.can(t.url, ['read']));

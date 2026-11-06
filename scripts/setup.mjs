@@ -17,5 +17,5 @@ if (process.argv.includes('--remove')) {
       process.stdout.write('Stopped an older local bridge. The new host starts automatically.\n');
     }
   } catch {}
-  process.stdout.write(`Native connection installed for this user.\n${result.manifestPath}\n\nLoad the Firefox extension and enable access. It connects automatically; no pairing key is needed. Keep this project folder in place.\n`);
+  process.stdout.write(`Native connection installed for this user.\n${result.manifestPath}\n\nInstall Fox Bridge in Firefox and enable access. It connects automatically; no pairing key is needed. Keep this folder in place.\n`);
 }

@@ -66,4 +66,4 @@ The local key file is runtime state and never belongs in an archive or repositor
 
 ## Compatibility
 
-The supported interface is a Firefox WebExtension paired with a local MCP server. It does not control browser chrome, private tabs, internal pages, native dialogs, or other desktop applications. It does not implement proprietary OpenAI browser protocols, register a native browser mention, or expose CDP. Local unsigned XPIs are submission/development candidates; public releases require a verified Mozilla-signed XPI.
+The supported interface is a Firefox WebExtension paired with a local MCP server. It does not control browser chrome, private tabs, internal pages, native dialogs, or other desktop applications. It does not implement proprietary OpenAI browser protocols, register a native browser mention, or expose CDP.

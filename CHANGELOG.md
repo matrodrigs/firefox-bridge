@@ -2,7 +2,7 @@
 
 ## 0.1.0 — Unreleased
 
-Initial release, pending Mozilla signing.
+Initial release.
 
 - Local Firefox control through 32 MCP tools for pages, tabs, frames, browser features, and file transfers.
 - Automatic connection through Firefox Native Messaging, with no manual pairing key.
@@ -12,4 +12,4 @@ Initial release, pending Mozilla signing.
 - English interface with light/dark themes, keyboard-friendly controls, and live updates.
 - Local diagnostics, ESLint, Knip, automated checks, isolated Firefox integration tests, and documented installation and architecture.
 
-The release remains a draft until the signed XPI is verified. See [Contributing](CONTRIBUTING.md) for release checks and the [reference](docs/reference.md) for supported behavior and limits.
+See the [reference](docs/reference.md) for supported behavior and limits.

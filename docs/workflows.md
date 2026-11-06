@@ -61,7 +61,7 @@ Resource timing is limited to information exposed by the browser and authorized 
 
 ```text
 Find the attachment field on this page and request an upload. I will choose
-the document in the Firefox Bridge panel.
+the document in the Fox Bridge panel.
 ```
 
 `firefox_upload` creates a request tied to the observed file input. Choose files and confirm attachment in the panel. `firefox_upload_status` reports the result. The agent does not supply a filesystem path; the site may send the files as soon as they are attached.

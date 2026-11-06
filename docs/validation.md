@@ -1,10 +1,10 @@
 # Validation — 0.1.0 candidate
 
-Release status: **not published; Mozilla signing pending**. The local checks below were rerun against the 0.1.0 candidate with extension identity `firefox-bridge@matrodrigs`.
+The local checks below cover the Fox Bridge 0.1.0 extension and the matching Firefox Bridge runtime package.
 
 Local validation date: **2026-11-05**. Host: **Windows**, **Node.js 24.15.0**, **Firefox 159.0.1**. Tests ran in the intended Windows user environment, using isolated browser profiles and synthetic loopback pages.
 
-## Candidate checks
+## Recorded checks
 
 The completed `npm run check` gate passed: build, syntax checks for 45 JavaScript modules, ESLint, Knip, and **87 tests**. Extension validation reported zero errors, warnings, or notices. The complete `npm run test:firefox` gate passed **39 checks** across five isolated Firefox workflows (9 core, 8 advanced, 8 MCP/native messaging, 8 interaction, 6 debugging).
 
@@ -22,16 +22,9 @@ The local Firefox fixtures passed for:
 
 The panel was inspected at narrow and wide widths in light and dark themes, including long origins, pending requests, and connection errors. The reviewed layouts had no horizontal overflow. Behavioral tests cover control focus and file-selection preservation during refresh.
 
-Packaging generated the unsigned XPI, development ZIP, source ZIP, and checksums. The source ZIP was extracted into a fresh directory, dependencies installed with `npm ci`, and the extension rebuilt and packaged using the documented commands. The rebuilt unsigned XPI was byte-for-byte identical to the submission candidate. The source archive excludes generated bundles and contains the files needed to reproduce them. The seven panel previews were regenerated with version 0.1.0 and retained their overflow checks.
+Packaging generated the extension, local runtime, development and source archives, and checksums. A clean build from the source archive reproduced the XPI byte for byte. The runtime ZIP was extracted outside the repository and exercised without `node_modules`: its diagnostics ran and its MCP server exposed 32 tools. Seven panel previews were regenerated with the Fox Bridge name and retained their overflow checks.
 
-Raw local reports and screenshots are stored under `test-artifacts/firefox-bridge-validation/` and excluded from source/release packages. The [GitHub Actions baseline run](https://github.com/matrodrigs/firefox-bridge/actions/runs/42012662067) also passed: the shared checks and packaging on Windows/Ubuntu with Node 22/24, and all Firefox integration workflows on Ubuntu. That run validates implementation commit `752a9d3`; it is not evidence that the 0.1.0 release candidate is signed or that its final metadata has been verified.
-
-## Publication gate
-
-- Source and real-Firefox gates passed for this candidate; rerun them if implementation changes before submission.
-- Submit the unsigned candidate and reproducible source to Mozilla.
-- Verify the returned signed XPI's identifier/version and installation in standard Firefox.
-- Prepare checksums for the exact release files, then publish the draft and record the release date.
+Raw local reports and screenshots are stored under `test-artifacts/firefox-bridge-validation/` and excluded from packages. An [earlier CI run](https://github.com/matrodrigs/firefox-bridge/actions/runs/42014742753) passed on Windows and Ubuntu with Node 22/24 and ran Firefox integration workflows on Ubuntu. That run predates the extension name and runtime packaging changes tested locally here.
 
 ## Limits
 
@@ -39,5 +32,5 @@ Raw local reports and screenshots are stored under `test-artifacts/firefox-bridg
 - Linux native-host registration and reconnection passed in the Ubuntu CI fixture. macOS registration remains untested.
 - Synthetic input cannot satisfy every trusted-event requirement. The debug tools do not provide CDP, breakpoints, arbitrary evaluation, or complete DevTools parity.
 - Visual checks and automated behavior tests do not establish full screen-reader or accessibility certification.
-- Generated XPIs are unsigned. Packaging, lint, and local tests do not substitute for Mozilla signing or review.
+- Packaging and temporary-profile tests do not establish that an end-user installation succeeds.
 - The tests do not claim that the extension is installed in the user's normal Firefox profile or that personal tabs were exercised.

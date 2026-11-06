@@ -30,7 +30,7 @@ if (listed.status === 0 && JSON.parse(listed.stdout).installed?.some(plugin => p
     }))).every(Boolean);
   } catch (error) { if (!['ENOENT', 'ENOTDIR'].includes(error.code)) throw error; }
   if (identical) {
-    process.stdout.write(`Firefox Bridge ${manifest.version} is already installed and enabled in Codex.\nSelect the plugin and load the extension from this folder in Firefox.\n`);
+    process.stdout.write(`Firefox Bridge ${manifest.version} is already installed and enabled in Codex.\nSelect the plugin and open Fox Bridge in Firefox.\n`);
     process.exit(0);
   }
 }
@@ -61,4 +61,4 @@ if (old.status === 0) {
     if (removed.status !== 0) throw new Error('The plugin is installed, but the previous MCP entry could not be removed.');
   }
 }
-process.stdout.write('Firefox Bridge is installed as a personal plugin. Select it in Codex.\nReload the Firefox extension after updating and keep this folder in place.\n');
+process.stdout.write('Firefox Bridge is installed as a personal plugin. Select it in Codex.\nUpdate Fox Bridge after updating the local bridge and keep this folder in place.\n');
