@@ -54,4 +54,6 @@ Keep runtime credentials, private URLs, page contents, screenshots, console outp
 5. Inspect the archive inventory for local paths, runtime keys, profiles, debug captures, logs, test fixtures, and unexpected generated files. Source test scripts may be included; test run data must not be.
 6. Extract the source archive into a fresh directory, run `npm ci` and `npm run build`, and compare the rebuilt extension files with the packaged files.
 
+For a release, run `npm run package -- --signed-xpi <path>` with the verified distribution XPI. The command preserves that file's bytes, checks its application files against the build, and generates checksums for the extension, runtime, and source downloads. Signature metadata alone does not establish trust; verify installation in standard Firefox before publishing.
+
 When updating a development checkout, run `npm ci`, `npm run build`, and `npm run setup`; rerun `install-codex.cmd` if using the plugin. Extension and runtime versions must match.
