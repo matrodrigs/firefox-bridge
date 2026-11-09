@@ -16,8 +16,8 @@ The extension panel with example requests and site access controls.
 
 You need **Firefox 142+**, **Node.js 22+**, and an MCP client. The extension works with a small local bridge, installed once on your computer.
 
-1. Install **Fox Bridge** in Firefox.
-2. Extract the local bridge package to a permanent folder and run `setup.cmd` on Windows, or `node scripts/setup.mjs` on Linux/macOS.
+1. Install [Fox Bridge from Firefox Add-ons](https://addons.mozilla.org/firefox/addon/fox-bridge/).
+2. Download the [local bridge package](https://github.com/matrodrigs/firefox-bridge/releases/latest/download/Firefox-Bridge-0.1.0.zip), extract it to a permanent folder, and run `setup.cmd` on Windows, or `node scripts/setup.mjs` on Linux/macOS.
 3. [Connect your MCP client](docs/installation.md#connect-a-client). On Windows, `install-codex.cmd` sets up the bridge and Codex together.
 4. Open **Fox Bridge**, enable access, and review site permissions. It connects automatically; there is no pairing key to copy.
 

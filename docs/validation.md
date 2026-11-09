@@ -1,8 +1,8 @@
-# Validation — 0.1.0 candidate
+# Validation — 0.1.0
 
 The local checks below cover the Fox Bridge 0.1.0 extension and the matching Firefox Bridge runtime package.
 
-Local validation date: **2026-11-05**. Host: **Windows**, **Node.js 24.15.0**, **Firefox 159.0.1**. Tests ran in the intended Windows user environment, using isolated browser profiles and synthetic loopback pages.
+Latest local validation date: **2026-11-09**. Host: **Windows**, **Node.js 24.15.0**, **Firefox 159.0.1**. Tests ran in the intended Windows user environment, using isolated browser profiles and synthetic loopback pages.
 
 ## Recorded checks
 
@@ -26,11 +26,19 @@ Packaging generated the extension, local runtime, development and source archive
 
 Raw local reports and screenshots are stored under `test-artifacts/firefox-bridge-validation/` and excluded from packages. An [earlier CI run](https://github.com/matrodrigs/firefox-bridge/actions/runs/42014742753) passed on Windows and Ubuntu with Node 22/24 and ran Firefox integration workflows on Ubuntu. That run predates the extension name and runtime packaging changes tested locally here.
 
+## Distribution verification
+
+[Fox Bridge 0.1.0](https://addons.mozilla.org/firefox/addon/fox-bridge/) is publicly available on Firefox Add-ons. The downloaded XPI matched the SHA-256 published by the store: `c3555d14884a12d244335369e39f8f8bccbf3c63bafd49da2287745fad52ce67`. Its application files match the local build; only the manifest's JSON formatting differs.
+
+Eight additional checks passed in a fresh profile of standard Firefox with signature enforcement enabled. Firefox rejected the unsigned package, permanently installed the approved XPI, and recorded it as active and signed. The unmodified extension connected through native messaging, exposed 32 MCP tools, and answered status requests both before and after restarting Firefox. The profile started paused as intended. The test used an isolated runtime directory and port; it did not change the user's Firefox profile or native-host registration.
+
+Release packaging preserves the approved XPI unchanged and publishes checksums for that file, the local runtime, and the source archive. Distribution test reports are stored under `test-artifacts/release-validation/` and excluded from packages.
+
 ## Limits
 
 - Local browser verification covers the installed Firefox version and synthetic fixtures. It does not establish compatibility with every site or every supported Firefox release.
 - Linux native-host registration and reconnection passed in the Ubuntu CI fixture. macOS registration remains untested.
 - Synthetic input cannot satisfy every trusted-event requirement. The debug tools do not provide CDP, breakpoints, arbitrary evaluation, or complete DevTools parity.
 - Visual checks and automated behavior tests do not establish full screen-reader or accessibility certification.
-- Packaging and temporary-profile tests do not establish that an end-user installation succeeds.
+- Permanent signed installation and restart recovery were verified in an isolated Windows profile. Other operating systems and existing user profiles were not covered by that installation check.
 - The tests do not claim that the extension is installed in the user's normal Firefox profile or that personal tabs were exercised.

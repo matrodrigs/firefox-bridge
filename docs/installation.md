@@ -13,13 +13,13 @@ Windows has direct host validation and Linux has Ubuntu CI coverage. macOS regis
 
 ## Install the extension
 
-Install **Fox Bridge** from its add-on listing, or open the provided XPI in Firefox. To select an XPI manually, open `about:addons`, choose the gear menu, then **Install Add-on From File**.
+Install [Fox Bridge from Firefox Add-ons](https://addons.mozilla.org/firefox/addon/fox-bridge/). Firefox handles extension updates automatically. You can also download the XPI from the [GitHub release](https://github.com/matrodrigs/firefox-bridge/releases/latest), open `about:addons`, choose the gear menu, then **Install Add-on From File**.
 
 The extension cannot install the local bridge on your computer. Complete the following setup before connecting an assistant.
 
 ## Set up the local bridge
 
-1. Extract the `Firefox-Bridge-<version>.zip` local bridge package to a permanent folder inside your user profile.
+1. Download the [local bridge package](https://github.com/matrodrigs/firefox-bridge/releases/latest/download/Firefox-Bridge-0.1.0.zip) and extract it to a permanent folder inside your user profile.
 2. On Windows, run `setup.cmd`. On Linux or macOS, run `node scripts/setup.mjs` from the extracted folder.
 3. Open **Fox Bridge** in the Firefox toolbar, or use `Ctrl+Shift+Y` for its sidebar.
 4. Enable access and review the site permissions.
